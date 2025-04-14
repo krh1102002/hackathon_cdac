@@ -34,7 +34,7 @@ router.get("/all", (req, res) => {
 
 // user-specific blogs
 router.get("/user", (req, res) => {
-  const sql = `select b.id,b.title,b.contents,c.title from user u,blogs b,categories c where u.id=? and u.id=b.user_id and b.category_id=c.id`;
+  const sql = `select b.id,b.title,b.contents,c.title as "Category Title" from user u,blogs b,categories c where u.id=? and u.id=b.user_id and b.category_id=c.id`;
   pool.query(sql, [req.headers.userId], (error, data) => {
     res.send(result.createResult(error, data));
   });
