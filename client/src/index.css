@@ -1,0 +1,8 @@
+* {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.nav-link.active {
+  background-color: #007bff; /* Change this to your desired color */
+  border-radius: 5px;
+}
