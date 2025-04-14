@@ -1,0 +1,14 @@
+[
+    {
+        "full_name":"Tanay Phadke",
+        "email": "tanay@test.com",
+        "password":"tanay",
+        "phone_no": 1234567890
+    },
+    {
+        "full_name":"Kunal Hulke",
+        "email": "kunal@test.com",
+        "password":"kunal",
+        "phone_no": 9876543210
+    }
+]
