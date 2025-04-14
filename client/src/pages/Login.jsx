@@ -1,13 +1,35 @@
 import axios from 'axios'
 import React , {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import {toast} from 'react-toastify'
+import { loginUser } from '../services/user'
 
 function Login(){
     const [email , setEmail] = useState('')
     const [password , setPassword] = useState('')
+
+    const navigate = useNavigate()
     const onLogin = async () =>{
-        console.log(email)
+        // console.log(email)
         // console.log(password)
+        if(email.length == 0){
+            toast.error('Please enter email')
+        }
+        else if(password.length == 0){
+        toast.error('Please enter password')
+        }
+        else{
+            const result = await loginUser(email , password)
+            console.log(result)
+            if(result.status == 'success'){
+                sessionStorage.setItem('token' , result.data.token)
+                sessionStorage.setItem('full name' , result.data.name)
+                navigate('/all_blogs')
+            }
+            else{
+                toast.error('Invalid user name or password')
+            }
+        }
     }
     return(
         <div className='container mt-3'>
