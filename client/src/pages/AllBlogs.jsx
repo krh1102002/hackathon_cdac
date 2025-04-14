@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteForever } from "react-icons/md";
+import { loadAllBlogs } from "../services/blogs";
+import { toast } from "react-toastify";
 
-function MyBlogs() {
+function AllBlogs() {
   const [searchText, setSearchText] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [blogs, setBlogs] = useState([
-    { id: 1, title: "Mark", category: "Otto" },
-    // Add more initial blogs if needed
-  ]);
+  const [blogs, setBlogs] = useState([]);
   const [currentBlog, setCurrentBlog] = useState({
     id: null,
     title: "",
@@ -54,27 +53,31 @@ function MyBlogs() {
     setCurrentBlog({ ...currentBlog, [name]: value });
   };
 
+  const showAllBLogs = async () => {
+    const res = await loadAllBlogs();
+    if (res.status == "success") {
+      setBlogs(res.data);
+    } else {
+      toast.error(res.error);
+    }
+  };
+
+  useEffect(() => {
+    showAllBLogs();
+  }, []);
+
   return (
     <div className="container">
       <h1 className="my-3">ALL BLOGS</h1>
-      <div className="d-flex mb-4 justify-content-between">
-        <div>
+      <div className="d-flex mb-4 justify-content-end">
+        <div className="d-flex">
           <input
             type="text"
-            className="p-1 px-3"
+            className="p-1 px-3 py-1"
             onChange={(e) => setSearchText(e.target.value)}
             placeholder="Search here"
           />
           <button className="btn btn-success ms-3 px-4 fw-bold">Search</button>
-        </div>
-        <div>
-          <button
-            type="button"
-            className="btn btn-success px-4 fw-bold"
-            onClick={handleAddClick}
-          >
-            ADD
-          </button>
         </div>
       </div>
       <table className="table table-bordered table-hover">
@@ -87,25 +90,23 @@ function MyBlogs() {
           </tr>
         </thead>
         <tbody>
-          {blogs
-            .filter((blog) =>
-              blog.title.toLowerCase().includes(searchText.toLowerCase())
-            )
-            .map((blog) => (
-              <tr key={blog.id}>
-                <th scope="row">{blog.id}</th>
-                <td>{blog.title}</td>
-                <td>{blog.category}</td>
+          {blogs.map((data, index) => {
+            return (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{data.title}</td>
+                <td>{data.CategoryTitle}</td>
                 <td>
-                  <button className="btn" onClick={() => handleEditClick(blog)}>
+                  <button className="btn">
                     <CiEdit size={20} />
                   </button>
-                  <button className="btn" onClick={() => handleDelete(blog.id)}>
+                  <button className="btn">
                     <MdDeleteForever size={20} color="red" />
                   </button>
                 </td>
               </tr>
-            ))}
+            );
+          })}
         </tbody>
       </table>
 
@@ -176,4 +177,4 @@ function MyBlogs() {
   );
 }
 
-export default MyBlogs;
+export default AllBlogs;

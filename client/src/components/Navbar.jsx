@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../App";
+import { toast } from "react-toastify";
 
 function Navbar() {
   const location = useLocation();
@@ -9,6 +11,23 @@ function Navbar() {
     setActiveTab(path);
   };
 
+  // get the logged in user info
+  const { user, setUser } = useContext(AuthContext);
+
+  // get the navigate function reference
+  const navigate = useNavigate();
+
+  const onLogout = () => {
+    // clear the cache
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("full name");
+
+    // reset the context
+    setUser(null);
+    toast.success("Logout Successfully!!!");
+    // redirect to login
+    navigate("/");
+  };
   return (
     <div
       className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"
@@ -73,7 +92,9 @@ function Navbar() {
       </ul>
       <hr />
       <div className="d-flex justify-content-end">
-        <button className="btn btn-info">Logout</button>
+        <button onClick={onLogout} className="btn btn-info">
+          Logout
+        </button>
       </div>
     </div>
   );

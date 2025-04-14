@@ -17,7 +17,7 @@ router.post("/add-blog", (req, res) => {
 });
 
 // get all blogs
-router.get("/all", (req, res) => {
+router.get("/", (req, res) => {
   const sql = `select b.id,b.title,b.contents,c.title as "CategoryTitle" from blogs b,categories c where b.category_id=c.id`;
   pool.query(sql, (error, data) => {
     if (data) {

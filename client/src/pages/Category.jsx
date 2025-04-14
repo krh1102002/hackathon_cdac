@@ -29,11 +29,7 @@ function Category() {
 
   const handleSave = () => {
     if (isEditing) {
-      console.log("Editing category:", editingCategoryId, categoryName);
-      // Add your edit logic here
     } else {
-      console.log("Adding category:", categoryName);
-      // Add your add logic here
     }
     setShowModal(false);
   };

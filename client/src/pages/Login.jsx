@@ -1,12 +1,33 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../services/user";
+import { toast } from "react-toastify";
+import { AuthContext } from "../App";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const { setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
   const onLogin = async () => {
-    console.log(email);
+    if (email.length == 0) {
+      toast.error("Please enter email");
+    } else if (password.length == 0) {
+      toast.error("Please enter password");
+    } else {
+      const result = await loginUser(email, password);
+
+      if (result.status == "success") {
+        const { fullName } = result.data;
+        sessionStorage.setItem("token", result.data.token);
+        sessionStorage.setItem("full name", result.data.name);
+        setUser({ fullName });
+        toast.success("Login Successfully");
+        navigate("/container/all_blogs");
+      } else {
+        toast.error("Invalid user name or password");
+      }
+    }
   };
 
   return (
